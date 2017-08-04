@@ -1,20 +1,39 @@
 body {
- background-color: #D9853B;
+ background-color: #A7D49B;
  font-family: 'Julee', cursive;
 }
 
-#board {  
+#buttons-bar {
+  margin-top: 40px;
+  text-align: center;
+}
+
+#panel {
+  margin: 0 auto;
+  margin-top: 40px;
+
+  width: 285px;
+  height: 285px;
+
+  background-color: #92AC86;
+  border-radius: 20px;
+
+  border: 5px solid #fff;
+}
+
+#board {
+  display: none;
+
   padding: 1px;
   background-color: #F9EED7;
   margin: 0 auto;
-  
+
   margin-top: 40px;
   margin-bottom: 40px;
-  
+
   width: 285px;
   height: 285px;
   border-radius: 20px;
-  
   box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 }
 
@@ -77,22 +96,15 @@ body {
   font-size: 75px;
 }
 
-#panel {
-  width: 285px;
-  height: 285px;
-  
-  background-color: grey;
-  margin: 0 auto;
-  border: 4px solid #030d1c;
-  border-radius: 20px;
-}
-
 footer {
-  font-family: 'Slabo 27px', serif;
+  font-family: 'Source Sans Pro', sans-serif;
+  letter-spacing: 1px;
   font-weight: 600;
-  font-size: 15px;
-  color: #e3e7ed;
+  font-size: 14px;
+  color: black;
   text-align: center;
   width: 100%;
   margin-top: 30px;
 }
+
+/*-- Color Palletes:  https://coolors.co/a7d49b-92ac86-696047-55251d-5a1807 --*/
