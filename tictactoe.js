@@ -7,6 +7,14 @@ var grid = [
   [0, 0, 0]
 ];
 
+$(document).ready(function(){
+    chooseGameOption();
+})
+
+function chooseGameOption() {
+  $("#panel-message").append("How do you want to play?");
+}
+
 $(".box").click(function(){
   if ($(this).find('#x').length == 0 && $(this).find('#o').length == 0 ) {
     if(turnX){

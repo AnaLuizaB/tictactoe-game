@@ -15,10 +15,20 @@ body {
   width: 285px;
   height: 285px;
 
-  background-color: #92AC86;
+  background-color: #696047;
   border-radius: 20px;
 
   border: 5px solid #fff;
+}
+
+#panel-message {
+  font-family: 'Oxygen', sans-serif;
+  font-size: 35px;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 30%;
+  padding-bottom: 30%;
 }
 
 #board {
