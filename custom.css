@@ -1,6 +1,5 @@
 body {
  background-color: #A7D49B;
- font-family: 'Julee', cursive;
 }
 
 #panel {
@@ -36,6 +35,7 @@ body {
 }
 
 #board {
+  font-family: 'Oxygen', sans-serif;
   display: none;
   background-color: #F9EED7;
   margin: 0 auto;
@@ -103,7 +103,7 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   text-align: center;
-  font-size: 75px;
+  font-size: 65px;
 }
 
 footer {

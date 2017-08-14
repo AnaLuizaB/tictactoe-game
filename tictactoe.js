@@ -44,14 +44,23 @@ function twoPlayers() {
 }
 
 function newGame() {
-  console.log("New game was selected!");
-
   gameOver = false;
 
   clearPanel();
   clearBoard();
 
   chooseGameOption();
+}
+
+function resetGame() {
+
+  gameOver = false;
+
+  clearPanel();
+  clearBoard();
+
+  $("#board").fadeIn("slow");
+  $("#panel").fadeOut("slow");
 }
 
 function clearPanel() {
@@ -88,6 +97,7 @@ function showWinner(winner) {
 
 function endGameOptions(){
   $("#panel-buttons").append('<button onClick="newGame();" class="panel-button" type="button" name="button">New Game</button>').hide().fadeIn(1000);
+  $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">Reset Game</button>').hide().fadeIn(1000);
 }
 
 function makeMove(row, column) {
