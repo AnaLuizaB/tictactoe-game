@@ -1,4 +1,4 @@
-var turnX = true;
+var turnX = Math.round(Math.random());
 var turn = 1;
 var gameOption;
 var gameOver = false;
@@ -10,8 +10,23 @@ var grid = [
   [0, 0, 0]
 ];
 
-function makeMove(row, column, event) {
+$(document).ready(function(){
+    newGame();
+});
 
+function showPlayerTurn() {
+  $("#panel-turn").fadeIn( "slow" );
+  $("#panel-turn-message").empty();
+
+  if(turnX) {
+    $("#panel-turn-message").append('Player X turn!');
+  } else {
+    $("#panel-turn-message").append('Player O turn!');
+
+  }
+}
+
+function makeMove(row, column, event) {
   var space = event;
 
   if(gameOver == false) {
@@ -41,31 +56,10 @@ function makeMove(row, column, event) {
     if(isDraw()){
       showDraw();
     }
+    showPlayerTurn();
     isGameOver();
   }
 }
-
-// $(".box").click(function(){
-//   if(gameOver == false) {
-//     if ($(this).find('#x').length == 0 && $(this).find('#o').length == 0 ) {
-//       if(turnX){
-//         $(this).append('<p id="x" class="value">X</p>');
-//         turnX = false;
-//       } else {
-//         $(this).append('<p id="o" class="value">O</p>');
-//         turnX = true;
-//       }
-//     } else {
-//       console.log("Occupied space!");
-//     }
-//   } else {
-//     console.log("The game is over!");
-//   }
-// });
-
-$(document).ready(function(){
-    newGame();
-});
 
 function chooseGameOption() {
   // <button class="panel-button" type="button" name="button" disabled>One Player</button>
@@ -74,6 +68,8 @@ function chooseGameOption() {
 }
 
 function twoPlayers() {
+  showPlayerTurn();
+
   if($("#board").css('display') == 'none')
     $("#board").fadeIn( "slow" );
   if($("#panel").css('display') == 'block')
@@ -81,6 +77,7 @@ function twoPlayers() {
 }
 
 function newGame() {
+  turnX = Math.round(Math.random());
   gameOver = false;
 
   clearPanel();
@@ -90,11 +87,13 @@ function newGame() {
 }
 
 function resetGame() {
-
+  turnX = Math.round(Math.random());
   gameOver = false;
 
   clearPanel();
   clearBoard();
+
+  showPlayerTurn();
 
   $("#board").fadeIn("slow");
   $("#panel").fadeOut("slow");
@@ -103,6 +102,7 @@ function resetGame() {
 function clearPanel() {
   $("#panel-message").empty();
   $("#panel-buttons").empty();
+  $("#panel-turn").hide();
 }
 
 function clearBoard() {
