@@ -65,16 +65,6 @@ function makeMove(row, column, event) {
   }
 }
 
-function showPlayerTurn() {
-  $("#panel-turn").fadeIn( "slow" );
-  $("#panel-turn-message").empty();
-
-  if(turnX)
-    $("#panel-turn-message").append('Player X turn!');
-  else
-    $("#panel-turn-message").append('Player O turn!');
-}
-
 function chooseGameOption() {
   $("#panel-message").append("How do you want to play?").hide().fadeIn(500);
   $("#panel-buttons").append('<button class="panel-button" type="button" name="button" onclick="onePlayer()">One Player</button><button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
@@ -90,7 +80,6 @@ function onePlayer() {
   if($("#board").css('display') == 'none')
     $("#board").fadeIn( "slow" );
 }
-
 
 function twoPlayers() {
   showPlayerTurn();
@@ -145,6 +134,16 @@ function clearBoard() {
   ];
 
   $("#board").hide().fadeOut(1500);
+}
+
+function showPlayerTurn() {
+  $("#panel-turn").fadeIn( "slow" );
+  $("#panel-turn-message").empty();
+
+  if(turnX)
+    $("#panel-turn-message").append('Player X turn!');
+  else
+    $("#panel-turn-message").append('Player O turn!');
 }
 
 function showWinner(winner) {
