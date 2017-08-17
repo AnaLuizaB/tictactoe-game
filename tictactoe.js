@@ -10,14 +10,17 @@ var grid = [
   [0, 0, 0]
 ];
 
-$(".box").click(function(){
+function makeMove(row, column, event) {
+
+  var space = event;
+
   if(gameOver == false) {
-    if ($(this).find('#x').length == 0 && $(this).find('#o').length == 0 ) {
+    if ($(space).find('#x').length == 0 && $(space).find('#o').length == 0 ) {
       if(turnX){
-        $(this).append('<p id="x" class="value">X</p>');
+        $(space).append('<p id="x" class="value">X</p>');
         turnX = false;
       } else {
-        $(this).append('<p id="o" class="value">O</p>');
+        $(space).append('<p id="o" class="value">O</p>');
         turnX = true;
       }
     } else {
@@ -26,7 +29,39 @@ $(".box").click(function(){
   } else {
     console.log("The game is over!");
   }
-});
+
+  if (grid[row][column] == 0) {
+    grid[row][column] = turn;
+
+    if (turn == 1) {
+      turn = -1;
+    } else {
+      turn = 1;
+    }
+    if(isDraw()){
+      showDraw();
+    }
+    isGameOver();
+  }
+}
+
+// $(".box").click(function(){
+//   if(gameOver == false) {
+//     if ($(this).find('#x').length == 0 && $(this).find('#o').length == 0 ) {
+//       if(turnX){
+//         $(this).append('<p id="x" class="value">X</p>');
+//         turnX = false;
+//       } else {
+//         $(this).append('<p id="o" class="value">O</p>');
+//         turnX = true;
+//       }
+//     } else {
+//       console.log("Occupied space!");
+//     }
+//   } else {
+//     console.log("The game is over!");
+//   }
+// });
 
 $(document).ready(function(){
     newGame();
@@ -108,23 +143,6 @@ function showDraw(){
 function endGameOptions(){
   $("#panel-buttons").append('<button onClick="newGame();" class="panel-button" type="button" name="button">New Game</button>').hide().fadeIn(500);
   $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">Reset Game</button>').hide().fadeIn(500);
-}
-
-function makeMove(row, column) {
-  if (grid[row][column] == 0) {
-    grid[row][column] = turn;
-
-    if (turn == 1) {
-      turn = -1;
-    } else {
-      turn = 1;
-    }
-    if(isDraw()){
-      showDraw();
-    }
-
-    isGameOver();
-  }
 }
 
 function isGameOver() {
