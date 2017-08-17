@@ -1,6 +1,7 @@
 var turnX = Math.round(Math.random());
 var turn = 1;
-var gameOption;
+var onePlayerOption = false;
+var computerTurn = false;
 var gameOver = false;
 var draw = false;
 
@@ -14,29 +15,23 @@ $(document).ready(function(){
     newGame();
 });
 
-function showPlayerTurn() {
-  $("#panel-turn").fadeIn( "slow" );
-  $("#panel-turn-message").empty();
-
-  if(turnX) {
-    $("#panel-turn-message").append('Player X turn!');
-  } else {
-    $("#panel-turn-message").append('Player O turn!');
-
-  }
-}
-
 function makeMove(row, column, event) {
   var space = event;
 
   if(gameOver == false) {
     if ($(space).find('#x').length == 0 && $(space).find('#o').length == 0 ) {
       if(turnX){
-        $(space).append('<p id="x" class="value">X</p>');
-        turnX = false;
+        if(onePlayerOption && !computerTurn) {
+          computerTurn = true;
+          $(space).append('<p id="x" class="value">X</p>');
+          turnX = false;
+        }
       } else {
-        $(space).append('<p id="o" class="value">O</p>');
-        turnX = true;
+          if(onePlayerOption && !computerTurn) {
+            computerTurn = true;
+            $(space).append('<p id="o" class="value">O</p>');
+            turnX = true;
+          }
       }
     } else {
       console.log("Occupied space!");
@@ -56,16 +51,46 @@ function makeMove(row, column, event) {
     if(isDraw()){
       showDraw();
     }
+
+    if(onePlayerOption && computerTurn) {
+
+      computerTurn = false;
+      console.log(grid);
+      grid = minimaxMove(grid);
+      console.log(grid);
+    }
+
     showPlayerTurn();
     isGameOver();
   }
 }
 
-function chooseGameOption() {
-  // <button class="panel-button" type="button" name="button" disabled>One Player</button>
-  $("#panel-message").append("How do you want to play?").hide().fadeIn(500);
-  $("#panel-buttons").append('<button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
+function showPlayerTurn() {
+  $("#panel-turn").fadeIn( "slow" );
+  $("#panel-turn-message").empty();
+
+  if(turnX)
+    $("#panel-turn-message").append('Player X turn!');
+  else
+    $("#panel-turn-message").append('Player O turn!');
 }
+
+function chooseGameOption() {
+  $("#panel-message").append("How do you want to play?").hide().fadeIn(500);
+  $("#panel-buttons").append('<button class="panel-button" type="button" name="button" onclick="onePlayer()">One Player</button><button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
+}
+
+function onePlayer() {
+  showPlayerTurn();
+
+  onePlayerOption = true;
+
+  if($("#panel").css('display') == 'block')
+    $("#panel").fadeOut( "slow" );
+  if($("#board").css('display') == 'none')
+    $("#board").fadeIn( "slow" );
+}
+
 
 function twoPlayers() {
   showPlayerTurn();
@@ -89,6 +114,9 @@ function newGame() {
 function resetGame() {
   turnX = Math.round(Math.random());
   gameOver = false;
+  computerTurn = false;
+  onePlayerOption = false;
+  turn = 1;
 
   clearPanel();
   clearBoard();
@@ -182,4 +210,36 @@ function isDraw() {
     }
   }
   return draw;
+}
+
+// Player vs AI -> Code based at https://blog.vivekpanyam.com/how-to-build-an-ai-that-wins-the-basics-of-minimax-search/
+
+var numNodes = 0;
+
+function recurseMinimax(grid, player) {
+  numNodes++;
+  var nextVal = null;
+  var nextBoard = null;
+
+  for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+          if (grid[i][j] == 0) {
+              grid[i][j] = player;
+              var value = recurseMinimax(board, !player)[0];
+              if ((player && (nextVal == 0 || value > nextVal)) || (!player && (nextVal == null || value < nextVal))) {
+                  nextBoard = grid.map(function(arr) {
+                      return arr.slice();
+                  });
+                  nextVal = value;
+              }
+              grid[i][j] = 0;
+          }
+      }
+  }
+  return [nextVal, nextBoard];
+}
+
+function minimaxMove(board) {
+    numNodes = 0;
+    return recurseMinimax(board, true)[1];
 }
