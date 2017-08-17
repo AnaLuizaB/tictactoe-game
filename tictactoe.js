@@ -2,6 +2,7 @@ var turnX = true;
 var turn = 1;
 var gameOption;
 var gameOver = false;
+var draw = false;
 
 var grid = [
   [0, 0, 0],
@@ -32,8 +33,9 @@ $(document).ready(function(){
 });
 
 function chooseGameOption() {
-  $("#panel-message").append("How do you want to play?").hide().fadeIn(1500);
-  $("#panel-buttons").append('<button class="panel-button" type="button" name="button">One Player</button><button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
+  // <button class="panel-button" type="button" name="button" disabled>One Player</button>
+  $("#panel-message").append("How do you want to play?").hide().fadeIn(500);
+  $("#panel-buttons").append('<button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
 }
 
 function twoPlayers() {
@@ -87,17 +89,25 @@ function showWinner(winner) {
   $("#panel").fadeIn("slow");
 
   if(winner == 1) {
-    $("#panel-message").append("Player X Won!").hide().fadeIn(1500);
+    $("#panel-message").append("Player X Won!").hide().fadeIn(500);
     endGameOptions();
   } else {
-    $("#panel-message").append("Player O Won!").hide().fadeIn(1500);
+    $("#panel-message").append("Player O Won!").hide().fadeIn(500);
     endGameOptions();
   }
 }
 
+function showDraw(){
+  clearPanel();
+  $("#panel").fadeIn("slow");
+
+  $("#panel-message").append("It's a draw!").hide().fadeIn(500);
+  endGameOptions();
+}
+
 function endGameOptions(){
-  $("#panel-buttons").append('<button onClick="newGame();" class="panel-button" type="button" name="button">New Game</button>').hide().fadeIn(1000);
-  $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">Reset Game</button>').hide().fadeIn(1000);
+  $("#panel-buttons").append('<button onClick="newGame();" class="panel-button" type="button" name="button">New Game</button>').hide().fadeIn(500);
+  $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">Reset Game</button>').hide().fadeIn(500);
 }
 
 function makeMove(row, column) {
@@ -109,6 +119,10 @@ function makeMove(row, column) {
     } else {
       turn = 1;
     }
+    if(isDraw()){
+      showDraw();
+    }
+
     isGameOver();
   }
 }
@@ -139,4 +153,15 @@ function isGameOver() {
     gameOver = true;
     return;
   }
+}
+
+function isDraw() {
+  draw = true;
+  for (var i = 0; i < grid.length; i++) {
+    for (var j= 0; j < grid[i].length;j++) {
+      if(grid[i][j] == 0)
+        draw = false;
+    }
+  }
+  return draw;
 }
