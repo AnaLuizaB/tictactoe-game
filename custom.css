@@ -28,11 +28,27 @@ body {
 }
 
 .panel-button {
-  background-color: #fafafa;
+  background: linear-gradient(#24292E, #47515b);
+  color: white;
+  transition: all 0.1s;
+  border: none;
   border-radius: 5px;
-  padding: 7.5px;
-  margin: 2.5px;
+  padding: 10px;
+  margin: 5px;
+  box-shadow: 0px 5px silver;
 }
+
+.panel-button:hover {
+  background: linear-gradient(#47515b, #24292E);
+  color: white;
+  padding: 10px;
+}
+
+.panel-button:active {
+  box-shadow: 0px 2.5px silver;
+  transform: translateY(4px);
+}
+
 
 #board {
   font-family: 'Oxygen', sans-serif;
