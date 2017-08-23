@@ -119,10 +119,8 @@ function newGame() {
   turn = 1;
   gameOver = false;
   draw = false;
-
   onePlayerOption = false;
 
-  resetGame();
   clearPanel();
   clearBoard();
 
