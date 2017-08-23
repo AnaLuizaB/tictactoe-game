@@ -1,4 +1,4 @@
-var turnX = Math.round(Math.random());
+var turnX = 1
 var turn = 1;
 var onePlayerOption = false;
 var computerTurn = false;
@@ -17,56 +17,82 @@ $(document).ready(function(){
 
 function makeMove(row, column, event) {
   var space = event;
-
   if(gameOver == false) {
     if ($(space).find('#x').length == 0 && $(space).find('#o').length == 0 ) {
-      if(turnX){
-        if(onePlayerOption && !computerTurn) {
-          computerTurn = true;
+      if(onePlayerOption) {
+        $(space).append('<p id="x" class="value">X</p>');
+      } else {
+        if(turnX){
           $(space).append('<p id="x" class="value">X</p>');
           turnX = false;
         } else {
-          $(space).append('<p id="x" class="value">X</p>');
-          turnX = false;
+          $(space).append('<p id="o" class="value">O</p>');
+          turnX = true;
         }
-      } else {
-          if(onePlayerOption && !computerTurn) {
-            computerTurn = true;
-            $(space).append('<p id="o" class="value">O</p>');
-            turnX = true;
-          } else {
-            $(space).append('<p id="o" class="value">O</p>');
-            turnX = true;
-          }
       }
-    } else {
-      console.log("Occupied space!");
     }
-  } else {
-    console.log("The game is over!");
   }
-
-  if (grid[row][column] == 0) {
-    grid[row][column] = turn;
-
-    if (turn == 1) {
-      turn = -1;
+  if (grid[row][column] == null) {
+    if(onePlayerOption) {
+      grid[row][column] = false;
     } else {
-      turn = 1;
-    }
-    if(isDraw()){
-      showDraw();
+      grid[row][column] = turn;
     }
 
-    if(onePlayerOption && computerTurn) {
-      console.log(grid);
-      makeAiMove(grid);
-      console.log(grid);
+    if (!onePlayerOption) {
+      if (turn == 1) turn = -1; else turn = 1;
+    }
+
+    if(onePlayerOption) {
+      makeAiMove();
+      markAiOption();
     }
 
     showPlayerTurn();
+    if(isDraw()) showDraw();
     isGameOver();
   }
+}
+
+function isGameOver() {
+  for (var i = 0; i < grid.length; i++) {
+      if(grid[i][0] == grid[i][1] && grid[i][0]==grid[i][2] && grid[i][0]!=null){
+        showWinner(grid[i][0]);
+        gameOver = true;
+        return grid[i][0];
+      }
+  }
+  for (var i = 0; i < grid.length; i++) {
+      if(grid[0][i] == grid[1][i] && grid[0][i]==grid[2][i]  && grid[0][i]!=null){
+        showWinner(grid[0][i]);
+        gameOver = true;
+        return grid[0][i];
+      }
+  }
+  if(grid[0][0]==grid[1][1] && grid[0][0] == grid[2][2]  && grid[0][0]!=null){
+    showWinner(grid[0][0]);
+    gameOver = true;
+    return grid[0][0];
+  }
+
+  if(grid[0][2]==grid[1][1] && grid[0][2] == grid[2][0]  && grid[2][0]!=null){
+    showWinner(grid[1][1]);
+    gameOver = true;
+    return grid[1][1];
+  }
+
+  return null;
+}
+
+function isDraw() {
+  draw = true;
+  for (var i = 0; i < grid.length; i++) {
+    for (var j= 0; j < grid[i].length;j++) {
+      if(grid[i][j] == null)
+        draw = false;
+    }
+  }
+  return draw;
 }
 
 function chooseGameOption() {
@@ -78,7 +104,6 @@ function onePlayer() {
   showPlayerTurn();
 
   onePlayerOption = true;
-  turnX = 1;
 
   if($("#panel").css('display') == 'block')
     $("#panel").fadeOut( "slow" );
@@ -106,11 +131,9 @@ function newGame() {
 }
 
 function resetGame() {
-  turnX = Math.round(Math.random());
   gameOver = false;
-  computerTurn = false;
-  onePlayerOption = false;
   turn = 1;
+  turnX = 1;
 
   clearPanel();
   clearBoard();
@@ -133,9 +156,9 @@ function clearBoard() {
   }
 
   grid = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]
+    [null, null, null],
+    [null, null, null],
+    [null, null, null]
   ];
 
   $("#board").hide().fadeOut(1500);
@@ -156,8 +179,13 @@ function showWinner(winner) {
   $("#panel").fadeIn("slow");
 
   if(winner == 1) {
-    $("#panel-message").append("Player X Won!").hide().fadeIn(500);
-    endGameOptions();
+    if(onePlayerOption) {
+      $("#panel-message").append("The AI won!").hide().fadeIn(500);
+      endGameOptions();
+    } else {
+      $("#panel-message").append("Player X Won!").hide().fadeIn(500);
+      endGameOptions();
+    }
   } else {
     $("#panel-message").append("Player O Won!").hide().fadeIn(500);
     endGameOptions();
@@ -177,63 +205,114 @@ function endGameOptions(){
   $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">Reset Game</button>').hide().fadeIn(500);
 }
 
-function isGameOver() {
+function markAiOption() {
   for (var i = 0; i < grid.length; i++) {
-      if(grid[i][0] == grid[i][1] && grid[i][0]==grid[i][2] && grid[i][0]!=0){
-        showWinner(grid[i][0]);
-        gameOver = true;
-        return grid[i][0];
+    for (var j = 0; j < grid[i].length;j++) {
+      if(grid[i][j] == true) {
+        if(i == 0 && j == 0) {
+          if($('#box1').find('#o').length == 0) {
+            $('#box1').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 0 && j == 1) {
+          if($('#box2').find('#o').length == 0) {
+            $('#box2').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 0 && j == 2) {
+          if($('#box3').find('#o').length == 0) {
+            $('#box3').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 1 && j == 0) {
+          if($('#box4').find('#o').length == 0) {
+            $('#box4').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 1 && j == 1) {
+          if($('#box5').find('#o').length == 0) {
+            $('#box5').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 1 && j == 2) {
+          if($('#box6').find('#o').length == 0) {
+            $('#box6').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 2 && j == 0) {
+          if($('#box7').find('#o').length == 0) {
+            $('#box7').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 2 && j == 1) {
+          if($('#box8').find('#o').length == 0) {
+            $('#box8').append('<p id="o" class="value">O</p>');
+          }
+        }
+        if(i == 2 && j == 2) {
+          if($('#box9').find('#o').length == 0) {
+            $('#box9').append('<p id="o" class="value">O</p>');
+          }
+        }
       }
-  }
-  for (var i = 0; i < grid.length; i++) {
-      if(grid[0][i] == grid[1][i] && grid[0][i]==grid[2][i]  && grid[0][i]!=0){
-        showWinner(grid[0][i]);
-        gameOver = true;
-        return grid[0][i];
-      }
-  }
-  if(grid[0][0]==grid[1][1] && grid[0][0] == grid[2][2]  && grid[0][0]!=0){
-    showWinner(grid[0][0]);
-    gameOver = true;
-    return grid[0][0];
-  }
-
-  if(grid[0][2]==grid[1][1] && grid[0][2] == grid[2][0]  && grid[2][0]!=0){
-    showWinner(grid[1][1]);
-    gameOver = true;
-    return grid[1][1];
-  }
-
-  return null;
-}
-
-function isDraw() {
-  draw = true;
-  for (var i = 0; i < grid.length; i++) {
-    for (var j= 0; j < grid[i].length;j++) {
-      if(grid[i][j] == 0)
-        draw = false;
     }
   }
-  return draw;
 }
-
 // Player vs AI -> Code based at https://blog.vivekpanyam.com/how-to-build-an-ai-that-wins-the-basics-of-minimax-search/
-
 var numNodes = 0;
+function getWinner(grid) {
+    vals = [true, false];
+    var allNotNull = true;
+    for (var k = 0; k < vals.length; k++) {
+        var value = vals[k];
 
-function recurseMinimax(board, player) {
+        var diagonalComplete1 = true;
+        var diagonalComplete2 = true;
+        for (var i = 0; i < 3; i++) {
+            if (grid[i][i] != value) {
+                diagonalComplete1 = false;
+            }
+            if (grid[2 - i][i] != value) {
+                diagonalComplete2 = false;
+            }
+            var rowComplete = true;
+            var colComplete = true;
+            for (var j = 0; j < 3; j++) {
+                if (grid[i][j] != value) {
+                    rowComplete = false;
+                }
+                if (grid[j][i] != value) {
+                    colComplete = false;
+                }
+                if (grid[i][j] == null) {
+                    allNotNull = false;
+                }
+            }
+            if (rowComplete || colComplete) {
+                return value ? 1 : 0;
+            }
+        }
+        if (diagonalComplete1 || diagonalComplete2) {
+            return value ? 1 : 0;
+        }
+    }
+    if (allNotNull) {
+        return -1;
+    }
+    return null;
+}
+function recurseMinimax(grid, player) {
     numNodes++;
-    var winner = isGameOver();
-    console.log(winner);
+    var winner = getWinner(grid);
+
     if (winner != null) {
         switch(winner) {
             case 1:
-                return [1, board]
+                return [1, grid]
             case 0:
-                return [-1, board]
+                return [-1, grid]
             case -1:
-                return [0, board];
+                return [0, grid];
         }
     } else {
       var nextVal = null;
@@ -241,28 +320,26 @@ function recurseMinimax(board, player) {
 
       for (var i = 0; i < 3; i++) {
           for (var j = 0; j < 3; j++) {
-              if (board[i][j] == null) {
-                  board[i][j] = player;
-                  var value = recurseMinimax(board, !player)[0];
+              if (grid[i][j] == null) {
+                  grid[i][j] = player;
+                  var value = recurseMinimax(grid, !player)[0];
                   if ((player && (nextVal == null || value > nextVal)) || (!player && (nextVal == null || value < nextVal))) {
-                      nextBoard = board.map(function(arr) {
+                      nextBoard = grid.map(function(arr) {
                           return arr.slice();
                       });
                       nextVal = value;
                   }
-                  board[i][j] = null;
+                  grid[i][j] = null;
               }
           }
       }
       return [nextVal, nextBoard];
    }
 }
-
-function minimaxMove(board) {
+function minimaxMove(grid) {
     numNodes = 0;
-    return recurseMinimax(board, true)[1];
+    return recurseMinimax(grid, true)[1];
 }
-
 function makeAiMove() {
     grid = minimaxMove(grid);
     console.log(numNodes);
