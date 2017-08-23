@@ -1,7 +1,6 @@
 var turnX = 1
 var turn = 1;
 var onePlayerOption = false;
-var computerTurn = false;
 var gameOver = false;
 var draw = false;
 
@@ -53,7 +52,6 @@ function makeMove(row, column, event) {
     isGameOver();
   }
 }
-
 function isGameOver() {
   for (var i = 0; i < grid.length; i++) {
       if(grid[i][0] == grid[i][1] && grid[i][0]==grid[i][2] && grid[i][0]!=null){
@@ -83,7 +81,6 @@ function isGameOver() {
 
   return null;
 }
-
 function isDraw() {
   draw = true;
   for (var i = 0; i < grid.length; i++) {
@@ -94,12 +91,10 @@ function isDraw() {
   }
   return draw;
 }
-
 function chooseGameOption() {
   $("#panel-message").append("How do you want to play?").hide().fadeIn(500);
   $("#panel-buttons").append('<button class="panel-button" type="button" name="button" onclick="onePlayer()">One Player</button><button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
 }
-
 function onePlayer() {
   showPlayerTurn();
 
@@ -110,7 +105,6 @@ function onePlayer() {
   if($("#board").css('display') == 'none')
     $("#board").fadeIn( "slow" );
 }
-
 function twoPlayers() {
   showPlayerTurn();
 
@@ -121,9 +115,14 @@ function twoPlayers() {
 }
 
 function newGame() {
-  turnX = Math.round(Math.random());
+  turnX = 1;
+  turn = 1;
   gameOver = false;
+  draw = false;
 
+  onePlayerOption = false;
+
+  resetGame();
   clearPanel();
   clearBoard();
 
@@ -134,6 +133,7 @@ function resetGame() {
   gameOver = false;
   turn = 1;
   turnX = 1;
+  draw = false;
 
   clearPanel();
   clearBoard();
