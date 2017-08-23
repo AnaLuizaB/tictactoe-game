@@ -52,6 +52,7 @@ function makeMove(row, column, event) {
     isGameOver();
   }
 }
+
 function isGameOver() {
   for (var i = 0; i < grid.length; i++) {
       if(grid[i][0] == grid[i][1] && grid[i][0]==grid[i][2] && grid[i][0]!=null){
@@ -81,6 +82,7 @@ function isGameOver() {
 
   return null;
 }
+
 function isDraw() {
   draw = true;
   for (var i = 0; i < grid.length; i++) {
@@ -91,10 +93,12 @@ function isDraw() {
   }
   return draw;
 }
+
 function chooseGameOption() {
   $("#panel-message").append("How do you want to play?").hide().fadeIn(500);
   $("#panel-buttons").append('<button class="panel-button" type="button" name="button" onclick="onePlayer()">One Player</button><button class="panel-button" type="button" name="button" onclick="twoPlayers()">Two Players</button>').hide().fadeIn(1500);
 }
+
 function onePlayer() {
   showPlayerTurn();
 
@@ -105,6 +109,7 @@ function onePlayer() {
   if($("#board").css('display') == 'none')
     $("#board").fadeIn( "slow" );
 }
+
 function twoPlayers() {
   showPlayerTurn();
 
@@ -199,8 +204,8 @@ function showDraw(){
 }
 
 function endGameOptions(){
-  $("#panel-buttons").append('<button onClick="newGame();" class="panel-button" type="button" name="button">New Game</button>').hide().fadeIn(500);
-  $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">Reset Game</button>').hide().fadeIn(500);
+  $("#panel-buttons").append('<button onClick="newGame();" class="panel-button" type="button" name="button">Back to Menu</button>').hide().fadeIn(500);
+  $("#panel-buttons").append('<button onClick="resetGame();" class="panel-button" type="button" name="button">New Game</button>').hide().fadeIn(500);
 }
 
 function markAiOption() {
